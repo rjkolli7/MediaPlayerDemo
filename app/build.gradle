@@ -4,12 +4,16 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'androidx.navigation.safeargs.kotlin'
+
 android {
-    compileSdkVersion 28
+    compileSdkVersion androidConfig.compileSdkVersion
     defaultConfig {
         applicationId "com.rjkolli7.mediaplayerdemo"
-        minSdkVersion 15
-        targetSdkVersion 28
+        minSdkVersion androidConfig.minSdkVersion
+        targetSdkVersion androidConfig.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -19,16 +23,50 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            applicationIdSuffix '.debug'
+        }
+    }
+    dataBinding {
+        enabled = true
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.core:core-ktx:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // kotlin standard libraries
+    implementation dep.kotlinDep
+    implementation dep.androidxCoreKtxDep
+
+    // android standard libraries
+    implementation dep.androidxAppCompactDep
+    implementation dep.constraintLayoutDep
+
+    // design libraries
+    implementation dep.googleMaterialDep
+
+    // navigation
+    implementation dep.navigationFragmentKtxDep
+    implementation dep.navigationUiKtxDep
+
+    // life cycle
+    implementation dep.lifecycleRuntime
+    implementation dep.lifecycleExtension
+    annotationProcessor dep.lifecycleCompiler
+
+    // dagger
+    implementation dep.daggerDep
+    implementation dep.daggerAndroidDep
+    implementation dep.daggerAndroidSupportDep
+    kapt dep.daggerAndroidProDep
+    kapt dep.daggerCompilerDep
+
+    // unit test
+    testImplementation testDep.jUnitTestDep
+
+    // android test
+    androidTestImplementation testDep.androidTestRunnerDep
+    androidTestImplementation testDep.androidExtJunitTestDep
+    androidTestImplementation testDep.androidEspressoTestDep
 }
